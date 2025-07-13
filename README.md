@@ -1,34 +1,99 @@
-# MediTrack – Medical Tracker App
+# MediTrack - Medical Tracker App
 
-MediTrack is a real-life healthcare tracking app built with React, Material UI, Node.js, and Express. It helps users manage:
+MediTrack is a full-stack medical tracking app built using **React.js**, **Node.js**, and **Express**, hosted on **Render** (backend) and **Vercel** (frontend). It helps patients manage appointments, medications, clinic discovery, and profile management, with secure login, role-based access, geolocation, offline support, and background reminders.
 
-- 🗓 Doctor Appointments  
-- 💊 Medication Schedules  
-- 📍 Nearby Clinics (via Geolocation API)  
-- 📶 Offline-Aware Alerts (via Network Information API)  
-- 🔐 User Authentication (Patients and Doctors)  
+---
 
-## Tech Stack
+## 🌐 Live Deployment
 
-- Frontend: React, Material UI  
-- Backend: Node.js, Express  
-- APIs used: Geolocation API, Network Information API  
-- Authentication: Simple token-based login (mocked)  
+- **Frontend (Vercel):** [https://medi-app-track.vercel.app](https://medi-app-track.vercel.app)
+- **Backend (Render):** [https://mediapptrack.onrender.com](https://mediapptrack.onrender.com)
 
-## Features
+---
 
-- Secure login for patients and doctors  
-- Role-based UI (patients can add appointments, doctors can view)  
-- View and add appointments  
-- View medication schedules  
-- Find nearby clinics based on your location  
-- Network speed detection with offline warnings  
-- Logout functionality  
+## 🛠️ Tech Stack
 
-## Installation
+- **Frontend:** React, Material-UI
+- **Backend:** Node.js, Express
+- **Database:** (In-memory for demo)
+- **Hosting:** Vercel (frontend), Render (backend)
+- **APIs Used:**
+  - Geolocation API
+  - Network Information API
+  - Background Tasks API (via Service Worker + Notifications)
+  - Intersection Observer API (optional for lazy loading)
 
-Clone the repo:
+---
 
+## ✅ Features Implemented
+
+### 🔐 Authentication
+- Patient and Doctor login with username/password
+- Token-based authentication with `Bearer` header
+- Role stored securely in `localStorage`
+
+### 👤 Role-Based Views
+- Patients can:
+  - View and add appointments
+  - View medications
+  - View nearby clinics
+  - Access and edit profile
+- Doctors can:
+  - View appointments and medications only
+
+### 📍 Geolocation + Nearby Clinics
+- Uses **Geolocation API** to detect user location
+- Filters clinics within ~1 degree latitude/longitude
+- Displays nearby clinics dynamically
+
+### 🔗 Network Information API
+- Detects slow (2G) networks
+- Shows a Snackbar warning for users on limited connections
+
+### 🔔 Background Reminders
+- Service Worker sends demo notifications
+- Reminder: “Check your medications or upcoming appointments!”
+
+### 📑 Patient Profile
+- Profile tab for patients with fields:
+  - Name
+  - Email
+  - Age
+  - Gender
+- Updates saved locally (mock profile persistence)
+
+### 🌙 PWA Support (Partially)
+- Service Worker registered via `/public/service-worker.js`
+- Compatible with modern browsers
+
+---
+
+## 📂 Folder Structure
+client/
+├── public/
+│ └── service-worker.js // For background notifications
+├── src/
+│ ├── App.js // Main app logic
+│ └── ...
+server/
+├── index.js // Express backend
+├── package.json
+
+## 🚀 Running Locally
+
+### Backend (Express):
 ```bash
-git clone https://github.com/vivekkumar677/MediAppTrack.git
-cd meditrack
+cd server
+npm install
+npm start
+
+cd client
+npm install
+npm run dev # or npm start
+
+👨‍💻 Developer
+Vivek Kumar
+
+Full Stack Developer
+
+Built as a real-world MERN stack project demo
