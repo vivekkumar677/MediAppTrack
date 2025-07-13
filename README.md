@@ -6,7 +6,7 @@ MediTrack is a full-stack medical tracking app built using **React.js**, **Node.
 
 ## 🌐 Live Deployment
 
-- **Frontend (Vercel):** [https://medi-app-track.vercel.app](https://medi-app-track.vercel.app)
+- **Frontend (Vercel):** [[https://medi-app-track.vercel.app](https://medical-app-track.vercel.app/)
 - **Backend (Render):** [https://mediapptrack.onrender.com](https://mediapptrack.onrender.com)
 
 ---
