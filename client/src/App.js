@@ -69,7 +69,7 @@ function App() {
   // Fetch data after login
   useEffect(() => {
     if (token) {
-      fetch(`${API_BASE_URL}/api/appointments}`, {
+      fetch(`${API_BASE_URL}/api/appointments`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())
