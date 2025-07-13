@@ -18,6 +18,8 @@ import {
   CardContent,
 } from "@mui/material";
 
+const API_BASE_URL = "https://mediapptrack.onrender.com";
+
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
@@ -67,21 +69,21 @@ function App() {
   // Fetch data after login
   useEffect(() => {
     if (token) {
-      fetch("http://localhost:5000/api/appointments", {
+      fetch(`${API_BASE_URL}/api/appointments}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())
         .then(setAppointments)
         .catch(() => setAppointments([]));
 
-      fetch("http://localhost:5000/api/medications", {
+      fetch(`${API_BASE_URL}/api/medications`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())
         .then(setMedications)
         .catch(() => setMedications([]));
 
-      fetch("http://localhost:5000/api/clinics", {
+      fetch(`${API_BASE_URL}/api/clinics`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())
@@ -101,7 +103,7 @@ function App() {
 
   useEffect(() => {
     if (token) {
-      fetch("http://localhost:5000/api/clinics", {
+      fetch(`${API_BASE_URL}/api/clinics`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -113,7 +115,7 @@ function App() {
   }, [token]);
 
   const handleAddAppointment = () => {
-    fetch("http://localhost:5000/api/appointments", {
+    fetch(`${API_BASE_URL}/api/appointments`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -135,7 +137,7 @@ function App() {
   };
 
   const handleLogin = () => {
-    fetch("http://localhost:5000/api/login", {
+    fetch(`${API_BASE_URL}/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(loginData),
