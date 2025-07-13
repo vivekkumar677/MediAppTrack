@@ -20,12 +20,12 @@ import {
 
 const API_BASE_URL = "https://mediapptrack.onrender.com";
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
     navigator.serviceWorker
-      .register("/service-worker.js")
-      .then((reg) => console.log("[SW] Registered:", reg))
-      .catch((err) => console.error("[SW] Registration failed:", err));
+      .register('/service-worker.js')
+      .then(reg => console.log('[SW] Registered:', reg))
+      .catch(err => console.error('[SW] Registration failed:', err));
   });
 }
 
