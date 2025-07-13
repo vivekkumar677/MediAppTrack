@@ -29,6 +29,10 @@ MediTrack is a full-stack medical tracking app built using **React.js**, **Node.
 
 ### 🔐 Authentication
 - Patient and Doctor login with username/password
+- **Patient: Username- patient1
+-          Password- 1234
+- Doctor: Username- doctor1
+-         Password- abcd**
 - Token-based authentication with `Bearer` header
 - Role stored securely in `localStorage`
 
