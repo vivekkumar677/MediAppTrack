@@ -30,5 +30,5 @@ MediTrack is a real-life healthcare tracking app built with React, Material UI, 
 Clone the repo:
 
 ```bash
-git clone https://github.com/yourusername/meditrack.git
+git clone https://github.com/vivekkumar677/MediAppTrack.git
 cd meditrack
