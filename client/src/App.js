@@ -1,8 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  AppBar, Toolbar, Typography, Container, Tabs, Tab, Snackbar, Box, Button,
-  Dialog, DialogTitle, DialogContent, TextField, DialogActions, Card, CardContent
-} from '@mui/material';
+  AppBar,
+  Toolbar,
+  Typography,
+  Container,
+  Tabs,
+  Tab,
+  Snackbar,
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions,
+  Card,
+  CardContent,
+} from "@mui/material";
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/service-worker.js")
+      .then((reg) => console.log("[SW] Registered:", reg))
+      .catch((err) => console.error("[SW] Registration failed:", err));
+  });
+}
 
 function App() {
   const [tab, setTab] = useState(0);
@@ -11,34 +34,59 @@ function App() {
   const [clinics, setClinics] = useState([]);
   const [location, setLocation] = useState(null);
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ name: '', date: '', time: '', location: '' });
+  const [form, setForm] = useState({
+    name: "",
+    date: "",
+    time: "",
+    location: "",
+  });
   const [offline, setOffline] = useState(false);
-  const [loginData, setLoginData] = useState({ username: '', password: '' });
-  const [token, setToken] = useState(localStorage.getItem('token') || '');
-  const [role, setRole] = useState(localStorage.getItem('role') || '');
+  const [loginData, setLoginData] = useState({ username: "", password: "" });
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [role, setRole] = useState(localStorage.getItem("role") || "");
+  const [profile, setProfile] = useState({
+    name: "John Doe",
+    email: "johndoe@example.com",
+    age: 30,
+    gender: "Male",
+  });
+
+  const tabCount = role === "patient" ? 4 : 3;
 
   // Network Information API
+
   useEffect(() => {
     if (navigator.connection) {
-      navigator.connection.addEventListener('change', () => {
-        setOffline(navigator.connection.effectiveType === '2g');
+      navigator.connection.addEventListener("change", () => {
+        setOffline(navigator.connection.effectiveType === "2g");
       });
-      setOffline(navigator.connection.effectiveType === '2g');
+      setOffline(navigator.connection.effectiveType === "2g");
     }
   }, []);
 
   // Fetch data after login
   useEffect(() => {
     if (token) {
-      fetch('http://localhost:5000/api/appointments')
-        .then(res => res.json())
-        .then(setAppointments);
-      fetch('http://localhost:5000/api/medications')
-        .then(res => res.json())
-        .then(setMedications);
-      fetch('http://localhost:5000/api/clinics')
-        .then(res => res.json())
-        .then(setClinics);
+      fetch("http://localhost:5000/api/appointments", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then(setAppointments)
+        .catch(() => setAppointments([]));
+
+      fetch("http://localhost:5000/api/medications", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then(setMedications)
+        .catch(() => setMedications([]));
+
+      fetch("http://localhost:5000/api/clinics", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then(setClinics)
+        .catch(() => setClinics([]));
     }
   }, [token]);
 
@@ -51,43 +99,65 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    if (token) {
+      fetch("http://localhost:5000/api/clinics", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then(setClinics)
+        .catch(() => setClinics([]));
+    }
+  }, [token]);
+
   const handleAddAppointment = () => {
-    fetch('http://localhost:5000/api/appointments', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form)
+    fetch("http://localhost:5000/api/appointments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
     })
-      .then(res => res.json())
-      .then(data => setAppointments(prev => [...prev, data]));
+      .then((res) => res.json())
+      .then((data) => setAppointments((prev) => [...prev, data]));
     setOpen(false);
-    setForm({ name: '', date: '', time: '', location: '' });
+    setForm({ name: "", date: "", time: "", location: "" });
   };
 
   const getNearbyClinics = () => {
-    if (!location) return [];
-    return clinics.filter(c =>
-      Math.abs(c.lat - location.lat) < 1 && Math.abs(c.lng - location.lng) < 1
+    console.log("Location:", location);
+    console.log("Clinics:", clinics);
+    if (!location || !clinics.length) return [];
+    return clinics.filter(
+      (c) =>
+        Math.abs(c.lat - location.lat) < 1 && Math.abs(c.lng - location.lng) < 1
     );
   };
 
   const handleLogin = () => {
-    fetch('http://localhost:5000/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(loginData)
+    fetch("http://localhost:5000/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(loginData),
     })
-      .then(res => {
-        if (!res.ok) throw new Error('Invalid credentials');
+      .then((res) => {
+        if (!res.ok) throw new Error("Invalid credentials");
         return res.json();
       })
-      .then(data => {
+      .then((data) => {
         setToken(data.token);
         setRole(data.role);
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('role', data.role);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
       })
-      .catch(() => alert('Invalid credentials'));
+      .catch(() => alert("Invalid credentials"));
   };
+
+  useEffect(() => {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }, [token]);
 
   if (!token) {
     return (
@@ -99,7 +169,9 @@ function App() {
             margin="normal"
             label="Username"
             value={loginData.username}
-            onChange={e => setLoginData({ ...loginData, username: e.target.value })}
+            onChange={(e) =>
+              setLoginData({ ...loginData, username: e.target.value })
+            }
           />
           <TextField
             fullWidth
@@ -107,7 +179,9 @@ function App() {
             label="Password"
             type="password"
             value={loginData.password}
-            onChange={e => setLoginData({ ...loginData, password: e.target.value })}
+            onChange={(e) =>
+              setLoginData({ ...loginData, password: e.target.value })
+            }
           />
           <Button fullWidth variant="contained" onClick={handleLogin}>
             Login
@@ -125,12 +199,12 @@ function App() {
           <Button
             color="inherit"
             onClick={() => {
-              setToken('');
-              setRole('');
-              localStorage.removeItem('token');
-              localStorage.removeItem('role');
+              setToken("");
+              setRole("");
+              localStorage.removeItem("token");
+              localStorage.removeItem("role");
             }}
-            style={{ marginLeft: 'auto' }}
+            style={{ marginLeft: "auto" }}
           >
             Logout
           </Button>
@@ -141,11 +215,12 @@ function App() {
         <Tab label="Appointments" />
         <Tab label="Medications" />
         <Tab label="Nearby Clinics" />
+        {role === "patient" && <Tab label="Profile" />}
       </Tabs>
 
       {tab === 0 && (
         <Box p={2}>
-          {role === 'patient' && (
+          {role === "patient" && (
             <Button variant="contained" onClick={() => setOpen(true)}>
               Add Appointment
             </Button>
@@ -154,6 +229,7 @@ function App() {
             <Card key={a.id} sx={{ mt: 2 }}>
               <CardContent>
                 <Typography variant="h6">{a.name}</Typography>
+                <Typography>Email: {a.email}</Typography>
                 <Typography>
                   Date: {a.date} | Time: {a.time}
                 </Typography>
@@ -180,7 +256,16 @@ function App() {
 
       {tab === 2 && (
         <Box p={2}>
-          {location ? (
+          {!location ? (
+            <Typography>Detecting your location…</Typography>
+          ) : clinics.length === 0 ? (
+            <Typography>Loading clinics nearby…</Typography>
+          ) : (
+            <Typography variant="h5">Nearby Clinics</Typography>
+          )}
+          {getNearbyClinics().length === 0 ? (
+            <Typography>No clinics nearby.</Typography>
+          ) : (
             getNearbyClinics().map((c) => (
               <Card key={c.id} sx={{ mt: 2 }}>
                 <CardContent>
@@ -191,9 +276,56 @@ function App() {
                 </CardContent>
               </Card>
             ))
-          ) : (
-            <Typography>Detecting your location...</Typography>
           )}
+        </Box>
+      )}
+
+      {/* Profile */}
+      {tab === 3 && role === "patient" && (
+        <Box p={2}>
+          <Typography variant="h6">Patient Profile</Typography>
+          <TextField
+            fullWidth
+            label="Full Name"
+            margin="dense"
+            value={profile.name}
+            onChange={(e) =>
+              setProfile((p) => ({ ...p, name: e.target.value }))
+            }
+          />
+          <TextField
+            fullWidth
+            label="Email"
+            margin="dense"
+            value={profile.email}
+            onChange={(e) =>
+              setProfile((p) => ({ ...p, email: e.target.value }))
+            }
+          />
+          <TextField
+            fullWidth
+            label="Age"
+            margin="dense"
+            type="number"
+            value={profile.age}
+            onChange={(e) => setProfile((p) => ({ ...p, age: e.target.value }))}
+          />
+          <TextField
+            fullWidth
+            label="Gender"
+            margin="dense"
+            value={profile.gender}
+            onChange={(e) =>
+              setProfile((p) => ({ ...p, gender: e.target.value }))
+            }
+          />
+          <Button
+            variant="contained"
+            sx={{ mt: 2 }}
+            onClick={() => alert("Profile updated locally (mock)")}
+          >
+            Update Profile
+          </Button>
         </Box>
       )}
 
@@ -205,7 +337,7 @@ function App() {
             label="Doctor"
             margin="dense"
             value={form.name}
-            onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
+            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
           />
           <TextField
             fullWidth
@@ -214,7 +346,7 @@ function App() {
             type="date"
             InputLabelProps={{ shrink: true }}
             value={form.date}
-            onChange={(e) => setForm(f => ({ ...f, date: e.target.value }))}
+            onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
           />
           <TextField
             fullWidth
@@ -223,14 +355,16 @@ function App() {
             type="time"
             InputLabelProps={{ shrink: true }}
             value={form.time}
-            onChange={(e) => setForm(f => ({ ...f, time: e.target.value }))}
+            onChange={(e) => setForm((f) => ({ ...f, time: e.target.value }))}
           />
           <TextField
             fullWidth
             label="Location"
             margin="dense"
             value={form.location}
-            onChange={(e) => setForm(f => ({ ...f, location: e.target.value }))}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, location: e.target.value }))
+            }
           />
         </DialogContent>
         <DialogActions>
@@ -239,7 +373,10 @@ function App() {
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={offline} message="You are on a slow network (2G). Some features may be limited." />
+      <Snackbar
+        open={offline}
+        message="You are on a slow network (2G). Some features may be limited."
+      />
     </Container>
   );
 }

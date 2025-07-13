@@ -14,11 +14,11 @@ let users = [
 let sessions = {};
 
 let appointments = [
-  { id: 1, name: 'Dr. Sharma', date: '2025-07-12', time: '10:00 AM', location: 'Clinic A' },
-  { id: 2, name: 'Dr. Patel', date: '2025-07-13', time: '11:00 AM', location: 'Clinic B' },
-  { id: 3, name: 'Dr. Tyagi', date: '2025-07-14', time: '12:00 PM', location: 'Clinic C' },
-  { id: 4, name: 'Dr. Gupta', date: '2025-07-15', time: '13:00 PM', location: 'Clinic D' },
-  { id: 5, name: 'Dr. Kumar', date: '2025-07-16', time: '14:00 PM', location: 'Clinic E' },
+  { id: 1, name: 'Dr. Sharma', email: 'sharma@gmail.com' , date: '2025-07-12', time: '10:00 AM', location: 'Clinic A' },
+  { id: 2, name: 'Dr. Patel', email: 'patel@gmail.com' ,date: '2025-07-13', time: '11:00 AM', location: 'Clinic B' },
+  { id: 3, name: 'Dr. Tyagi', email: 'tyagi@gmail.com' ,date: '2025-07-14', time: '12:00 PM', location: 'Clinic C' },
+  { id: 4, name: 'Dr. Gupta', email: 'gupta@gmail.com' ,date: '2025-07-15', time: '13:00 PM', location: 'Clinic D' },
+  { id: 5, name: 'Dr. V.Kumar', email: 'V.kumar@gmail.com' ,date: '2025-07-16', time: '14:00 PM', location: 'Clinic E' },
 ];
 
 let medications = [
@@ -32,6 +32,7 @@ let medications = [
 let clinics = [
   { id: 1, name: 'Sunrise Clinic', lat: 28.6139, lng: 77.2090 },
   { id: 2, name: 'GreenCare Hospital', lat: 28.5355, lng: 77.3910 },
+  { id: 99, name: 'Test Clinic Near Me', lat: 18.5204, lng: 73.8567 },
   { id: 3, name: 'City Hospital', lat: 28.7041, lng: 77.1025 },
   { id: 4, name: 'Metro Clinic', lat: 28.4595, lng: 77.0265 },
   { id: 5, name: 'Apollo Hospital', lat: 28.5355, lng: 77.3910 },
